@@ -1,0 +1,129 @@
+{
+  "_index": "app-000001",
+  "_type": "_doc",
+  "_id": "N2U2NWY5ZmMtNjE1NS00NDhkLWE2MDAtZjU3Y2VjZjgzYTg4",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "kubernetes": {
+      "namespace_name": "test-app2"
+    },
+    "openshift": {
+      "sequence": 1222,
+      "cluster_id": "3b7d6859-a140-4f6c-a55b-fe243572df2f"
+    },
+    "resources": {
+      "container": {
+        "image": {
+          "name": "docker.io/library/busybox",
+          "tag": "1.31.1"
+        },
+        "name": "log-generator-json",
+        "id": "cri-o://6c61a762d6c5de10b082824ccdab174d440af3ab368adce54d2b1c30b3485661"
+      },
+      "k8s": {
+        "pod": {
+          "owner": "",
+          "uid": "1a536ef6-0808-464d-8c54-f2f22b133ef3",
+          "ip": "10.128.2.24",
+          "name": "busybox-app2",
+          "annotations": {
+            "seccomp.security.alpha.kubernetes.io/pod": "runtime/default",
+            "openshift.io/scc": "restricted-v2",
+            "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"openshift-sdn\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.128.2.24\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"labels\":{\"my-label-key\":\"my-label-value\"},\"name\":\"busybox-app2\",\"namespace\":\"test-app2\"},\"spec\":{\"containers\":[{\"args\":[\"sh\",\"-c\",\"i=0; while true; do echo \\\"{ \\\\\\\"time1\\\\\\\": \\\\\\\"2023-06-02 13:41:40.3958\\\\\\\", \\\\\\\"time2\\\\\\\": \\\\\\\"$(date)\\\\\\\", \\\\\\\"message\\\\\\\": \\\\\\\"MERGE_JSON_LOG=true\\\\\\\", \\\\\\\"level\\\\\\\": \\\\\\\"debug\\\\\\\",\\\\\\\"Layer1\\\\\\\": \\\\\\\"layer1 0\\\\\\\", \\\\\\\"layer2\\\\\\\": {\\\\\\\"name\\\\\\\":\\\\\\\"Layer2 1\\\\\\\", \\\\\\\"tips\\\\\\\":\\\\\\\"Decide by PRESERVE_JSON_LOG\\\\\\\"}, \\\\\\\"StringNumber\\\\\\\":\\\\\\\"10\\\\\\\", \\\\\\\"Number\\\\\\\": 10,\\\\\\\"foo.bar\\\\\\\":\\\\\\\"Dot Item\\\\\\\",\\\\\\\"{foobar}\\\\\\\":\\\\\\\"Brace Item\\\\\\\",\\\\\\\"[foobar]\\\\\\\":\\\\\\\"Bracket Item\\\\\\\", \\\\\\\"foo:bar\\\\\\\":\\\\\\\"Colon Item\\\\\\\",\\\\\\\"foo bar\\\\\\\":\\\\\\\"Space Item\\\\\\\" }\\\"; i=$((i+1)) ; sleep 10; done\"],\"image\":\"docker.io/library/busybox:1.31.1\",\"name\":\"log-generator-json\"}],\"securityContext\":{\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}}}}\n"
+          },
+          "labels": {
+            "my-label-key": "my-label-value"
+          }
+        },
+        "namespace": {
+          "name": "test-app2",
+          "id": "9f249c14-d1a3-43cd-b0c3-21ce78d6deb4",
+          "labels": {
+            "security.openshift.io/scc.podSecurityLabelSync": "false",
+            "pod-security.kubernetes.io/enforce": "privileged",
+            "kubernetes.io/metadata.name": "test-app2"
+          }
+        }
+      },
+      "host": {
+        "name": "ip-10-0-132-240.us-west-2.compute.internal"
+      },
+      "attributes": {
+        "value": "",
+        "key": "log_type"
+      },
+      "logs": {
+        "file": {
+          "path": "/var/log/pods/test-app2_busybox-app2_1a536ef6-0808-464d-8c54-f2f22b133ef3/log-generator-json/0.log"
+        }
+      }
+    },
+    "severityNumber": "9",
+    "message": "{ \"time1\": \"2023-06-02 13:41:40.3958\", \"time2\": \"Fri Jul 28 20:08:25 UTC 2023\", \"message\": \"MERGE_JSON_LOG=true\", \"level\": \"debug\",\"Layer1\": \"layer1 0\", \"layer2\": {\"name\":\"Layer2 1\", \"tips\":\"Decide by PRESERVE_JSON_LOG\"}, \"StringNumber\":\"10\", \"Number\": 10,\"foo.bar\":\"Dot Item\",\"{foobar}\":\"Brace Item\",\"[foobar]\":\"Bracket Item\", \"foo:bar\":\"Colon Item\",\"foo bar\":\"Space Item\" }",
+    "log_type": "application",
+    "@timestamp": "2023-07-28T20:08:25.371537062Z",
+    "severityText": "default"
+  },
+  "fields": {
+    "@timestamp": [
+      "2023-07-28T20:08:25.371Z"
+    ]
+  },
+  "sort": [
+    1690574905371
+  ]
+}
+// unedited
+
+{
+    "_index": "app-000001",
+    "_type": "_doc",
+    "_id": "MmIwZDBmNDAtOGM2MS00YWJhLThlZDAtN2U1ZWM1MjdkM2Nm",
+    "_version": 1,
+    "_score": null,
+    "_source": {
+      "kubernetes": {
+        "container_name": "log-generator-json",
+        "flat_labels": [
+          "my-label-key=my-label-value"
+        ],
+        "namespace_id": "9f249c14-d1a3-43cd-b0c3-21ce78d6deb4",
+        "pod_ip": "10.128.2.24",
+        "annotations": {
+          "seccomp.security.alpha.kubernetes.io/pod": "runtime/default",
+          "openshift.io/scc": "restricted-v2",
+          "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"openshift-sdn\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.128.2.24\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"labels\":{\"my-label-key\":\"my-label-value\"},\"name\":\"busybox-app2\",\"namespace\":\"test-app2\"},\"spec\":{\"containers\":[{\"args\":[\"sh\",\"-c\",\"i=0; while true; do echo \\\"{ \\\\\\\"time1\\\\\\\": \\\\\\\"2023-06-02 13:41:40.3958\\\\\\\", \\\\\\\"time2\\\\\\\": \\\\\\\"$(date)\\\\\\\", \\\\\\\"message\\\\\\\": \\\\\\\"MERGE_JSON_LOG=true\\\\\\\", \\\\\\\"level\\\\\\\": \\\\\\\"debug\\\\\\\",\\\\\\\"Layer1\\\\\\\": \\\\\\\"layer1 0\\\\\\\", \\\\\\\"layer2\\\\\\\": {\\\\\\\"name\\\\\\\":\\\\\\\"Layer2 1\\\\\\\", \\\\\\\"tips\\\\\\\":\\\\\\\"Decide by PRESERVE_JSON_LOG\\\\\\\"}, \\\\\\\"StringNumber\\\\\\\":\\\\\\\"10\\\\\\\", \\\\\\\"Number\\\\\\\": 10,\\\\\\\"foo.bar\\\\\\\":\\\\\\\"Dot Item\\\\\\\",\\\\\\\"{foobar}\\\\\\\":\\\\\\\"Brace Item\\\\\\\",\\\\\\\"[foobar]\\\\\\\":\\\\\\\"Bracket Item\\\\\\\", \\\\\\\"foo:bar\\\\\\\":\\\\\\\"Colon Item\\\\\\\",\\\\\\\"foo bar\\\\\\\":\\\\\\\"Space Item\\\\\\\" }\\\"; i=$((i+1)) ; sleep 10; done\"],\"image\":\"docker.io/library/busybox:1.31.1\",\"name\":\"log-generator-json\"}],\"securityContext\":{\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}}}}\n"
+        },
+        "pod_id": "1a536ef6-0808-464d-8c54-f2f22b133ef3",
+        "namespace_labels": {
+          "pod-security_kubernetes_io_enforce": "privileged",
+          "kubernetes_io_metadata_name": "test-app2",
+          "security_openshift_io_scc_podSecurityLabelSync": "false"
+        },
+        "container_id": "cri-o://6c61a762d6c5de10b082824ccdab174d440af3ab368adce54d2b1c30b3485661",
+        "container_image": "docker.io/library/busybox:1.31.1",
+        "labels": {},
+        "namespace_name": "test-app2",
+        "pod_name": "busybox-app2"
+      },
+      "hostname": "ip-10-0-132-240.us-west-2.compute.internal",
+      "log_type": "application",
+      "@timestamp": "2023-07-28T17:53:44.388728117Z",
+      "openshift": {
+        "sequence": 1904,
+        "cluster_id": "3b7d6859-a140-4f6c-a55b-fe243572df2f"
+      },
+      "message": "{ \"time1\": \"2023-06-02 13:41:40.3958\", \"time2\": \"Fri Jul 28 17:53:44 UTC 2023\", \"message\": \"MERGE_JSON_LOG=true\", \"level\": \"debug\",\"Layer1\": \"layer1 0\", \"layer2\": {\"name\":\"Layer2 1\", \"tips\":\"Decide by PRESERVE_JSON_LOG\"}, \"StringNumber\":\"10\", \"Number\": 10,\"foo.bar\":\"Dot Item\",\"{foobar}\":\"Brace Item\",\"[foobar]\":\"Bracket Item\", \"foo:bar\":\"Colon Item\",\"foo bar\":\"Space Item\" }"
+    },
+    "fields": {
+      "@timestamp": [
+        "2023-07-28T17:53:44.388Z"
+      ]
+    },
+    "sort": [
+      1690566824388
+    ]
+  }

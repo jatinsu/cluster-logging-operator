@@ -15,7 +15,7 @@ KERBEROS_USERNAME=${KERBEROS_USERNAME:-$(whoami)}
 CLUSTER_DIR=${CLUSTER_DIR:-${HOME}/.openshift/cluster}
 QUIET=${QUIET:-0}
 FORCE=${FORCE:-0}
-REGION=us-west-2
+REGION=us-east-2
 SSH_KEY=
 
 usage() {

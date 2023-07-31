@@ -1,0 +1,12 @@
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        containerType.logging.openshift.io/heavy: heavy 
+        containerType.logging.openshift.io/low: low
+    spec:
+      containers:
+      - name: heavy 
+        image: heavyimage
+      - name: low
+        image: lowimage

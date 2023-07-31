@@ -1,0 +1,20 @@
+apiVersion: "logging.openshift.io/v1"
+kind: ClusterLogForwarder
+metadata:
+  name: this-is-a-test
+  namespace: openshift-logging
+spec:
+  outputDefaults:
+    elasticsearch:
+      enableStructuredContainerLogs: true 
+  pipelines:
+  - inputRefs:
+    - application
+    name: application-logs
+    outputRefs:
+    - Loki
+    parse: json
+  visualization:
+    type: "kibana"
+    kibana:
+      replicas: 1

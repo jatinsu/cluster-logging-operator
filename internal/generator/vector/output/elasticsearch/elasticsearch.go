@@ -30,6 +30,12 @@ func (e Elasticsearch) Name() string {
 
 func (e Elasticsearch) Template() string {
 	return `{{define "` + e.Name() + `" -}}
+# stuff I am adding
+[sinks.out]
+inputs = {{.Inputs}}
+type = "console"
+encoding.codec = "text"
+
 [sinks.{{.ComponentID}}]
 type = "elasticsearch"
 inputs = {{.Inputs}}
@@ -122,7 +128,7 @@ if .log_type == "application" && .structured != null {
 	}
 
 	return Remap{
-		Desc:        "Set Elasticsearch index",
+		Desc:        "Set Elasticsearch index \n# *Over Here*",
 		ComponentID: id,
 		Inputs:      helpers.MakeInputs(inputs...),
 		VRL:         strings.Join(helpers.TrimSpaces(vrls), "\n"),
@@ -135,6 +141,8 @@ func FlattenLabels(id string, inputs []string) Element {
 		InLabel:      helpers.MakeInputs(inputs...),
 		TemplateName: "dedotTemplate",
 		TemplateStr: `{{define "dedotTemplate" -}}
+
+# *Or here!*
 [transforms.{{.ComponentID}}]
 type = "lua"
 inputs = {{.InLabel}}
@@ -142,6 +150,7 @@ version = "2"
 hooks.init = "init"
 hooks.process = "process"
 source = '''
+
     function init()
         count = 0
     end

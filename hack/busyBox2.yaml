@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-app2
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    security.openshift.io/scc.podSecurityLabelSync: "false"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-app2
+  namespace: test-app2
+  labels:
+    my-label-key: my-label-value
+spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: log-generator-json
+      image: docker.io/library/busybox:1.31.1
+      args: ["sh", "-c", 'i=0; while true; do echo "{ \"time1\": \"2023-06-02 13:41:40.3958\", \"time2\": \"$(date)\", \"message\": \"MERGE_JSON_LOG=true\", \"level\": \"debug\",\"Layer1\": \"layer1 0\", \"layer2\": {\"name\":\"Layer2 1\", \"tips\":\"Decide by PRESERVE_JSON_LOG\"}, \"StringNumber\":\"10\", \"Number\": 10,\"foo.bar\":\"Dot Item\",\"{foobar}\":\"Brace Item\",\"[foobar]\":\"Bracket Item\", \"foo:bar\":\"Colon Item\",\"foo bar\":\"Space Item\" }"; i=$((i+1)) ; sleep 10; done']

@@ -13,26 +13,63 @@ import (
 
 const (
 	FixLogLevel = `
+
 if !exists(.level) {
-  .level = "default"
-  if match!(.message, r'Info|INFO|^I[0-9]+|level=info|Value:info|"level":"info"|<info>') {
-    .level = "info"
-  } else if match!(.message, r'Warning|WARN|^W[0-9]+|level=warn|Value:warn|"level":"warn"|<warn>') {
-    .level = "warn"
-  } else if match!(.message, r'Error|ERROR|^E[0-9]+|level=error|Value:error|"level":"error"|<error>') {
-    .level = "error"
-  } else if match!(.message, r'Critical|CRITICAL|^C[0-9]+|level=critical|Value:critical|"level":"critical"|<critical>') {
-    .level = "critical"
-  } else if match!(.message, r'Debug|DEBUG|^D[0-9]+|level=debug|Value:debug|"level":"debug"|<debug>') {
-    .level = "debug"
-  } else if match!(.message, r'Notice|NOTICE|^N[0-9]+|level=notice|Value:notice|"level":"notice"|<notice>') {
-    .level = "notice"
-  } else if match!(.message, r'Alert|ALERT|^A[0-9]+|level=alert|Value:alert|"level":"alert"|<alert>') {
-    .level = "alert"
-  } else if match!(.message, r'Emergency|EMERGENCY|^EM[0-9]+|level=emergency|Value:emergency|"level":"emergency"|<emergency>') {
-    .level = "emergency"
+	.level = "default"
+	.severityNumber = "9"
+	if match!(.message, r'Info|INFO|^I[0-9]+|level=info|Value:info|"level":"info"|<info>') {
+	  .level = "info"
+	  .severityNumber = "6"
+	} else if match!(.message, r'Warning|WARN|^W[0-9]+|level=warn|Value:warn|"level":"warn"|<warn>') {
+	  .level = "warn"
+	  .severityNumber = "4"
+	} else if match!(.message, r'Error|ERROR|^E[0-9]+|level=error|Value:error|"level":"error"|<error>') {
+	  .level = "error"
+	  .severityNumber = "3"
+	} else if match!(.message, r'Critical|CRITICAL|^C[0-9]+|level=critical|Value:critical|"level":"critical"|<critical>') {
+	  .level = "critical"
+	  .severityNumber = "2"
+	} else if match!(.message, r'Debug|DEBUG|^D[0-9]+|level=debug|Value:debug|"level":"debug"|<debug>') {
+	  .level = "debug"
+	  .severityNumber = "7"
+	} else if match!(.message, r'Notice|NOTICE|^N[0-9]+|level=notice|Value:notice|"level":"notice"|<notice>') {
+	  .level = "notice"
+	  .severityNumber = "5"
+	} else if match!(.message, r'Alert|ALERT|^A[0-9]+|level=alert|Value:alert|"level":"alert"|<alert>') {
+	  .level = "alert"
+	  .severityNumber = "1"
+	} else if match!(.message, r'Emergency|EMERGENCY|^EM[0-9]+|level=emergency|Value:emergency|"level":"emergency"|<emergency>') {
+	  .level = "emergency"
+	  .severityNumber = "0"
+	}
   }
-}
+.severityText = del(.level)
+# resources
+.resources.logs.file.path = del(.file)
+.resources.host.name= del(.hostname)
+.resources.container.name = del(.kubernetes.container_name)
+.resources.container.id = del(.kubernetes.container_id)
+
+# split image name and tag into separate fields
+container_image_slice = split!(.kubernetes.container_image, ":", limit: 2)
+.resources.container.image.name = container_image_slice[0]
+.resources.container.image.tag = container_image_slice[1]
+del(.kubernetes.container_image)
+
+#kuberenetes
+.resources.k8s.pod.name = del(.kubernetes.pod_name)
+.resources.k8s.pod.uid = del(.kubernetes.pod_id)
+.resources.k8s.pod.ip = del(.kubernetes.pod_ip)
+.resources.k8s.pod.owner = .kubernetes.pod_owner
+.resources.k8s.pod.annotations = del(.kubernetes.annotations)
+.resources.k8s.pod.labels = del(.kubernetes.labels)
+.resources.k8s.namespace.id = del(.kubernetes.namespace_id)
+
+.resources.k8s.namespace.name = .kubernetes.namespace_labels."kubernetes.io/metadata.name"
+.resources.k8s.namespace.labels = del(.kubernetes.namespace_labels)
+.resources.attributes.key = "log_type"
+.resources.attributes.value = del(.log_type)
+
 `
 	RemoveSourceType   = `del(.source_type)`
 	RemoveStream       = `del(.stream)`
@@ -49,7 +86,7 @@ match2, err = parse_regex(.message, r'msg=audit\((?P<ts_record>[^ ]+)\):')
 if err == null {
   sp, err = split(match2.ts_record,":")
   if err == null && length(sp) == 2 {
-      ts = parse_timestamp(sp[0],"%s.%3f") ?? ""
+      ts = to_unix_timestamp(to_timestamp!(del(.@timestamp))) ?? ""
       envelop |= {"record_id": sp[1]}
       . |= {"audit.linux" : envelop}
       . |= {"@timestamp" : format_timestamp(ts,"%+") ?? ""}

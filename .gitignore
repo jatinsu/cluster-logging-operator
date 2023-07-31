@@ -92,3 +92,6 @@ tags
 .target/
 .openshift/
 new-pull-secret.txt
+manuallyUpdateVector.sh
+updateVector.sh
+hack/busyBox2.yaml

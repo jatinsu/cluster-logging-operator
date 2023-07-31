@@ -91,3 +91,4 @@ tags
 .cache/
 .target/
 .openshift/
+new-pull-secret.txt

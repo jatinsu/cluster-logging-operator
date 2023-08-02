@@ -62,8 +62,8 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 `
 			vrls = append(vrls, parse)
 		}
-		if true{
-			test := `
+		if p.Schema{
+			schema := `
 					.severityText = del(.level)
 			  
 					# Convert syslog severity to number, default to 9 (unknown)
@@ -115,7 +115,7 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 					.resources.attributes.key = "log_type"
 					.resources.attributes.value = .log_type
 			  `
-			  vrls = append(vrls, test)
+			  vrls = append(vrls, schema)
 		}
 		vrl := SrcPassThrough
 		if len(vrls) != 0 {

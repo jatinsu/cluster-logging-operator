@@ -323,6 +323,11 @@ type PipelineSpec struct {
 	//
 	// +optional
 	DetectMultilineErrors bool `json:"detectMultilineErrors,omitempty"`
+
+	// Schema enables switching log records to the Open Telemetry specification
+	//
+	// +optional
+	Schema bool `json:"schema,omitempty"`
 }
 
 type OutputDefaults struct {

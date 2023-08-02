@@ -64,6 +64,7 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 		}
 		if p.Schema{
 			schema := `
+					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)
 			  
 					# Convert syslog severity to number, default to 9 (unknown)

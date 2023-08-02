@@ -47,6 +47,17 @@ const (
   </parse>
 </filter>
 {{end}}`
+
+
+SchemaTemplate = `
+{{define "Schema" -}}
+<match kubernetes.**>
+  @type schema
+  remove_tag_prefix 'kubernetes'
+  message message
+  force_line_breaks true
+  multiline_flush_interval .2
+</match>{{end}}`
 )
 
 func PipelineToOutputs(spec *logging.ClusterLogForwarderSpec, op Options) []Element {
@@ -83,6 +94,14 @@ func PipelineToOutputs(spec *logging.ClusterLogForwarderSpec, op Options) []Elem
 					Desc:         "Parse the logs into json",
 					TemplateName: "JsonParse",
 					TemplateStr:  fmt.Sprintf(JsonParseTemplate, source.ApplicationTagsForMultilineEx),
+				})
+		}
+		if p.Schema{
+			po.SubElements = append(po.SubElements,
+				ConfLiteral{
+					Desc:         "Change logs into Open Telemetry Specifications",
+					TemplateName: "Schema",
+					TemplateStr:  SchemaTemplate,
 				})
 		}
 		switch len(p.OutputRefs) {

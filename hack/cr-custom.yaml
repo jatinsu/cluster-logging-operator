@@ -12,3 +12,4 @@ spec:
     - default
     parse: json
     detectMultilineErrors: true
+    schema: true

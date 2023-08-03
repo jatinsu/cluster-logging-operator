@@ -12,9 +12,12 @@ spec:
     - application
     name: application-logs
     outputRefs:
-    - Loki
+    - default
     parse: json
+    detectMultilineErrors: true
   visualization:
     type: "kibana"
     kibana:
       replicas: 1
+  collection:
+    type: "vector"

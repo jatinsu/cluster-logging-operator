@@ -1,14 +1,15 @@
-apiVersion: logging.openshift.io/v1
+apiVersion: "logging.openshift.io/v1"
 kind: ClusterLogForwarder
 metadata:
   name: instance
   namespace: openshift-logging
 spec:
   pipelines:
-    - name: my-app-logs
-      inputRefs:
-        - application
-      outputRefs:
-        - default
-      detectMultilineErrors: true
-      schema: true
+  - inputRefs:
+    - application
+    name: application-logs
+    outputRefs:
+    - default
+    parse: json
+    detectMultilineErrors: true
+    schema: true

@@ -10,6 +10,5 @@ spec:
     name: application-logs
     outputRefs:
     - default
-    parse: json
     detectMultilineErrors: true
     schema: true

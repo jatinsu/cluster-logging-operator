@@ -62,8 +62,8 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 `
 			vrls = append(vrls, parse)
 		}
-		if p.Schema{
-			schema := `
+		if p.Schema {
+			schema := `	
 					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)
 			  
@@ -101,6 +101,8 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 					.resources.container.image.name = container_image_slice[0]
 					.resources.container.image.tag = container_image_slice[1]
 					del(.kubernetes.container_image)
+					
+					
 			  
 					#kuberenetes
 					.resources.k8s.pod.name = del(.kubernetes.pod_name)
@@ -115,8 +117,9 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 					.resources.k8s.namespace.labels = del(.kubernetes.namespace_labels)
 					.resources.attributes.key = "log_type"
 					.resources.attributes.value = .log_type
+					del(."_source")
 			  `
-			  vrls = append(vrls, schema)
+			vrls = append(vrls, schema)
 		}
 		vrl := SrcPassThrough
 		if len(vrls) != 0 {

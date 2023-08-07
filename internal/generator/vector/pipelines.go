@@ -52,17 +52,18 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 		}
 		if p.Parse == ParseJson {
 			parse := `
-			if .log_type == "application" {
-				parsed, err = parse_json(.message)
-				if err == null {
-				  .structured = parsed
-				  del(.message)
-				}
-			  }
+if .log_type == "application" {
+  parsed, err = parse_json(.message)
+  if err == null {
+    .structured = parsed
+    del(.message)
+  }
+}
 `
 			vrls = append(vrls, parse)
 		}
-		if p.Schema{
+
+		if p.Schema {
 			schema := `
 					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)
@@ -116,7 +117,13 @@ func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []ge
 					.resources.attributes.key = "log_type"
 					.resources.attributes.value = .log_type
 			  `
-			  vrls = append(vrls, schema)
+			  schema = strings.TrimSpace(schema)
+			  r := Remap{
+					  ComponentID: p.Name + "_otel",
+					  Inputs:      helpers.MakeInputs(inputs...),
+					  VRL:         schema,
+				  }
+			  el = append(el, r)
 		}
 		vrl := SrcPassThrough
 		if len(vrls) != 0 {

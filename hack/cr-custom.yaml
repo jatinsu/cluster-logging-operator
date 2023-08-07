@@ -10,5 +10,4 @@ spec:
     name: application-logs
     outputRefs:
     - default
-    detectMultilineErrors: true
-    schema: true
+    schema: "OpenTelemetry"

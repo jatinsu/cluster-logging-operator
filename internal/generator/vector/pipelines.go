@@ -12,7 +12,8 @@ import (
 )
 
 const (
-	ParseJson = "json"
+	ParseJson  = "json"
+	OtelSchema = "OpenTelemetry"
 )
 
 func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []generator.Element {
@@ -63,7 +64,7 @@ if .log_type == "application" {
 			vrls = append(vrls, parse)
 		}
 
-		if p.Schema {
+		if p.Schema == OtelSchema {
 			schema := `
 					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)
@@ -117,15 +118,16 @@ if .log_type == "application" {
 					.resources.attributes.key = "log_type"
 					.resources.attributes.value = .log_type
 			  `
-			  schema = strings.TrimSpace(schema)
-			  r := Remap{
-					  ComponentID: p.Name + "_otel",
-					  Inputs:      helpers.MakeInputs(inputs...),
-					  VRL:         schema,
-				  }
-			  el = append(el, r)
+			// schema = strings.TrimSpace(schema)
+			// r := Remap{
+			// 	ComponentID: p.Name + "_otel",
+			// 	Inputs:      helpers.MakeInputs(inputs...),
+			// 	VRL:         schema,
+			// }
+			// el = append(el, r)
+			vrls = append(vrls, schema)
 		}
-		vrl := SrcPassThrough
+		vrl := SrcPassThrough 
 		if len(vrls) != 0 {
 			vrl = strings.Join(helpers.TrimSpaces(vrls), "\n\n")
 		}

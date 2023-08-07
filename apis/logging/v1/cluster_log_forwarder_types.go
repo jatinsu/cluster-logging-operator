@@ -326,8 +326,10 @@ type PipelineSpec struct {
 
 	// Schema enables switching log records to the Open Telemetry specification
 	//
+	// Logs are converted to the Open Telemetry specification according to schema value, only `opentelemetry` is supported as of now.
+	//
 	// +optional
-	Schema bool `json:"schema,omitempty"`
+	Schema string `json:"schema,omitempty"`
 }
 
 type OutputDefaults struct {

@@ -30,7 +30,6 @@ func (e Elasticsearch) Name() string {
 
 func (e Elasticsearch) Template() string {
 	return `{{define "` + e.Name() + `" -}}
-# stuff I am adding
 [sinks.out]
 inputs = {{.Inputs}}
 type = "console"

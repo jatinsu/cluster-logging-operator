@@ -79,6 +79,10 @@ func Outputs(clspec *logging.CollectionSpec, secrets map[string]*corev1.Secret, 
 			}
 		}
 
+		if op.Has(constants.OpenTelemetry) {
+				op[generator.Ciphers] = "opentelemetry"
+		}
+
 		inputs := ofp[o.Name].List()
 		if o.HasPolicy() && o.GetMaxRecordsPerSecond() > 0 {
 			// Vector Throttle component cannot have zero threshold

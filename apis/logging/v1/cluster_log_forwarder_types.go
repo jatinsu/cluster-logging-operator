@@ -326,7 +326,8 @@ type PipelineSpec struct {
 
 	// Schema enables switching log records to the Open Telemetry specification
 	//
-	// Logs are converted to the Open Telemetry specification according to schema value, only `opentelemetry` is supported as of now.
+	// Logs are converted to the Open Telemetry specification according to schema value
+	//
 	// +kubebuilder:validation:Enum:=opentelemetry;viaq;none
 	// +optional
 	Schema string `json:"schema,omitempty"`

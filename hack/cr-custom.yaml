@@ -10,4 +10,4 @@ spec:
     name: application-logs
     outputRefs:
     - default
-    schema: "OpenTelemetry"
+    schema: "opentelemetry"

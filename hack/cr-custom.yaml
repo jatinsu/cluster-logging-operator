@@ -4,7 +4,7 @@ metadata:
   name: instance
   namespace: openshift-logging
   annotations:
-    logging.openshift.io/opentelemetry: enabled
+    logging.openshift.io/opentelemetry: otel
 spec:
   pipelines:
   - inputRefs:
@@ -12,3 +12,4 @@ spec:
     name: application-logs
     outputRefs:
     - default
+  schema: opentelemetry

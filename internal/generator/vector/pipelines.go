@@ -6,14 +6,14 @@ import (
 	"strings"
 
 	logging "github.com/openshift/cluster-logging-operator/apis/logging/v1"
+	"github.com/openshift/cluster-logging-operator/internal/constants"
 	"github.com/openshift/cluster-logging-operator/internal/generator"
 	. "github.com/openshift/cluster-logging-operator/internal/generator/vector/elements"
 	"github.com/openshift/cluster-logging-operator/internal/generator/vector/helpers"
 )
 
 const (
-	ParseJson  = "json"
-	OtelSchema = "opentelemetry"
+	ParseJson = "json"
 )
 
 func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []generator.Element {
@@ -64,7 +64,7 @@ if .log_type == "application" {
 			vrls = append(vrls, parse)
 		}
 
-		if p.Schema == OtelSchema {
+		if p.Schema == constants.OtelSchema {
 			schema := `
 					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)

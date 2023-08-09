@@ -80,7 +80,7 @@ func Outputs(clspec *logging.CollectionSpec, secrets map[string]*corev1.Secret, 
 		}
 
 		if op.Has(constants.OpenTelemetry) {
-				op[generator.Ciphers] = "opentelemetry"
+			op[generator.Otel] = "opentelemetry"
 		}
 
 		inputs := ofp[o.Name].List()

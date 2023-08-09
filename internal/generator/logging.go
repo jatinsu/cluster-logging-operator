@@ -10,9 +10,9 @@ const (
 	IncludeLegacyForwardConfig = "includeLegacyForwardConfig"
 	UseOldRemoteSyslogPlugin   = "useOldRemoteSyslogPlugin"
 	ClusterTLSProfileSpec      = "tlsProfileSpec"
-
-	MinTLSVersion = "minTLSVersion"
-	Ciphers       = "ciphers"
+	Otel                       = "otel"
+	MinTLSVersion              = "minTLSVersion"
+	Ciphers                    = "ciphers"
 )
 
 // GatherSources collects the set of unique source types and namespaces

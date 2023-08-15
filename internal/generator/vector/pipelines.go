@@ -6,13 +6,14 @@ import (
 	"strings"
 
 	logging "github.com/openshift/cluster-logging-operator/apis/logging/v1"
+	"github.com/openshift/cluster-logging-operator/internal/constants"
 	"github.com/openshift/cluster-logging-operator/internal/generator"
 	. "github.com/openshift/cluster-logging-operator/internal/generator/vector/elements"
 	"github.com/openshift/cluster-logging-operator/internal/generator/vector/helpers"
 )
 
 const (
-	ParseJson = "json"
+	ParseJson  = "json"
 )
 
 func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []generator.Element {
@@ -61,6 +62,64 @@ if .log_type == "application" {
 }
 `
 			vrls = append(vrls, parse)
+		}
+		// Make sure to remove @timestamp and log_type
+		// Have and and statement that checks for the feature gate
+		if p.Schema == constants.OtelSchema {
+			schema := `
+					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
+					.severityText = del(.level)
+			  
+					# Convert syslog severity to number, default to 9 (unknown)
+					if .severityText == "trace"{
+						.severityNumber = "8"
+					}else if .severityText == "debug"{
+						.severityNumber = "7"
+					}else if .severityText == "info"{
+						.severityNumber = "6"
+					}else if .severityText == "notice"{
+						.severityNumber = "5"
+					}else if .severityText == "warn"{
+						.severityNumber = "4"
+					}else if .severityText == "err"{
+						.severityNumber = "3"
+					}else if .severityText == "crit"{
+						.severityNumber = "2"
+					}else if .severityText == "alert"{
+						.severityNumber = "1"
+					}else if .severityText == "emerg"{
+						.severityNumber = "0"
+					}else{
+						.severityNumber = "9"
+					}
+					
+					# resources
+					.resources.logs.file.path = del(.file)
+					.resources.host.name= del(.hostname)
+					.resources.container.name = del(.kubernetes.container_name)
+					.resources.container.id = del(.kubernetes.container_id)
+			  
+					# split image name and tag into separate fields
+					container_image_slice = split!(.kubernetes.container_image, ":", limit: 2)
+					.resources.container.image.name = container_image_slice[0]
+					.resources.container.image.tag = container_image_slice[1]
+					del(.kubernetes.container_image)
+			  
+					#kuberenetes
+					.resources.k8s.pod.name = del(.kubernetes.pod_name)
+					.resources.k8s.pod.uid = del(.kubernetes.pod_id)
+					.resources.k8s.pod.ip = del(.kubernetes.pod_ip)
+					.resources.k8s.pod.owner = .kubernetes.pod_owner
+					.resources.k8s.pod.annotations = del(.kubernetes.annotations)
+					.resources.k8s.pod.labels = del(.kubernetes.labels)
+					.resources.k8s.namespace.id = del(.kubernetes.namespace_id)
+			  
+					.resources.k8s.namespace.name = .kubernetes.namespace_labels."kubernetes.io/metadata.name"
+					.resources.k8s.namespace.labels = del(.kubernetes.namespace_labels)
+					.resources.attributes.key = "log_type"
+					.resources.attributes.value = .log_type
+			  `
+			vrls = append(vrls, schema)
 		}
 		vrl := SrcPassThrough
 		if len(vrls) != 0 {

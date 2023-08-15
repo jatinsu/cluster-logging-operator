@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	ParseJson  = "json"
+	ParseJson = "json"
 )
 
 func Pipelines(spec *logging.ClusterLogForwarderSpec, op generator.Options) []generator.Element {

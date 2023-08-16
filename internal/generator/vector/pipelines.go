@@ -10,6 +10,7 @@ import (
 	"github.com/openshift/cluster-logging-operator/internal/generator"
 	. "github.com/openshift/cluster-logging-operator/internal/generator/vector/elements"
 	"github.com/openshift/cluster-logging-operator/internal/generator/vector/helpers"
+	genhelper "github.com/openshift/cluster-logging-operator/internal/generator/helpers"
 )
 
 const (
@@ -65,7 +66,7 @@ if .log_type == "application" {
 		}
 		// Make sure to remove @timestamp and log_type
 		// Have and and statement that checks for the feature gate
-		if p.Schema == constants.OtelSchema {
+		if p.Schema == constants.OtelSchema && genhelper.IsOtelOutput(op){
 			schema := `
 					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)

@@ -64,7 +64,7 @@ if .log_type == "application" {
 			vrls = append(vrls, parse)
 		}
 
-		if p.Schema == constants.OtelSchema {
+		if p.Schema == constants.OtelSchema || op.Has(constants.OpenTelemetry){
 			schema := `
 					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
 					.severityText = del(.level)

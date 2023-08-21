@@ -64,11 +64,10 @@ if .log_type == "application" {
 `
 			vrls = append(vrls, parse)
 		}
-		// Make sure to remove @timestamp and log_type
-		// Have and and statement that checks for the feature gate
+		
 		if p.Schema == constants.OtelSchema && genhelper.IsOtelOutput(op){
 			schema := `
-					.timeUnixNano = to_unix_timestamp(to_timestamp!(.@timestamp))
+					.timeUnixNano = to_unix_timestamp(to_timestamp!(del(.@timestamp)))
 					.severityText = del(.level)
 			  
 					# Convert syslog severity to number, default to 9 (unknown)
@@ -118,7 +117,7 @@ if .log_type == "application" {
 					.resources.k8s.namespace.name = .kubernetes.namespace_labels."kubernetes.io/metadata.name"
 					.resources.k8s.namespace.labels = del(.kubernetes.namespace_labels)
 					.resources.attributes.key = "log_type"
-					.resources.attributes.value = .log_type
+					.resources.attributes.value = del(.log_type)
 			  `
 			vrls = append(vrls, schema)
 		}

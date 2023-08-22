@@ -189,7 +189,7 @@ var _ = Describe("[Functional][Normalization] Json log parsing", func() {
 		Expect(logs[0].Message).To(Equal(expectedMessage), "received message not matching")
 	})
 
-	It("should verify LOG-2105 parses json message into structured field and writes to Elasticsearch", func() {
+	FIt("It should check if the logs succesfully translated into otel", func() {
 		framework = functional.NewCollectorFunctionalFrameworkUsingCollector(testfw.LogCollectionType)
 		clfb = functional.NewClusterLogForwarderBuilder(framework.Forwarder).
 			FromInput(logging.InputNameApplication).
@@ -206,7 +206,7 @@ var _ = Describe("[Functional][Normalization] Json log parsing", func() {
 		ExpectOK(framework.Deploy())
 
 		// Log message data
-		sample := `{"timeUnixNano":1666278690764363000,"severityText":"error","severityNumber":17,"body":{"stringValue":"E1020 15:11:30.764269       1 timeout.go:137] post-timeout activity - time-elapsed: 1.321595349s, GET \"/readyz\" result: <nil>"},"resource":{"log":{"file":{"path":"/var/log/pods/openshift-oauth-apiserver_apiserver-b477bc494-hmj4r_998cef46-bccd-437e-9727-4d6389436885/oauth-apiserver/6.log"}},"host":{"name":"oscar7"},"container":{"name":"oauth-apiserver","id":"cri-o://ae8d9c8e46defc9ff1df9a35076e04e7bd6be2d9056500570bf9e3f85e9d6885","image":{"name":"quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256","tag":":ed90fd557cc619f98a99bc8c552ee7b8a8ee369a3a2cdf2f9a4727878d2d049e"}},"k8s":{"pod":{"name":"apiserver-b477bc494-hmj4r","uid":"998cef46-bccd-437e-9727-4d6389436885","ip":"10.128.0.33","owner":"ReplicaSet/apiserver-b477bc494","annotations":{"k8s.ovn.org/pod-networks":"{\"default\":{\"ip_addresses\":[\"10.128.0.33/23\"],\"mac_address\":\"0a:58:0a:80:00:21\",\"gateway_ips\":[\"10.128.0.1\"],\"ip_address\":\"10.128.0.33/23\",\"gateway_ip\":\"10.128.0.1\"}}","k8s.v1.cni.cncf.io/network-status":"[{\n    \"name\": \"ovn-kubernetes\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.128.0.33\"\n    ],\n    \"mac\": \"0a:58:0a:80:00:21\",\n    \"default\": true,\n    \"dns\": {}\n}]","k8s.v1.cni.cncf.io/networks-status":"[{\n    \"name\": \"ovn-kubernetes\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.128.0.33\"\n    ],\n    \"mac\": \"0a:58:0a:80:00:21\",\n    \"default\": true,\n    \"dns\": {}\n}]","openshift.io/scc":"privileged","operator.openshift.io/dep-openshift-oauth-apiserver.etcd-client.secret":"OFllOQ==","operator.openshift.io/dep-openshift-oauth-apiserver.etcd-serving-ca.configmap":"f1B6eQ=="},"labels":{"apiserver":"true","app":"openshift-oauth-apiserver","oauth-apiserver-anti-affinity":"true","pod-template-hash":"b477bc494","revision":"2"}},"namespace":{"name":"openshift-oauth-apiserver","labels":{"kubernetes.io/metadata.name":"openshift-oauth-apiserver","olm.operatorgroup.uid/d5ae8d2e-99f3-4020-998d-9fc74c33faeb":"","openshift.io/cluster-monitoring":"true","pod-security.kubernetes.io/audit":"privileged","pod-security.kubernetes.io/enforce":"privileged","pod-security.kubernetes.io/warn":"privileged"}}},"attributes":[{"key":"log_type","value":"infrastructure"}]}}`
+		sample := `{"@timestamp":"2021-12-14T15:12:47.645Z","message":"Building mime message for recipient 'auser@somedomain.com' and sender 'Sympany <no-reply@somedomain>'.","level":"DEBUG","logger_name":"ch.sympany.backend.notificationservice.mail.MailServiceBean","thread_name":"default task-4"}`
 		expectedMessage = normalizeJson(sample)
 		expected = map[string]interface{}{}
 		_ = json.Unmarshal([]byte(sample), &expected)

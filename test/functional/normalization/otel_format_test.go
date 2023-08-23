@@ -55,7 +55,7 @@ const (
     `
 )
 
-var _ = Describe("[Functional][Normalization] Json log parsing", func() {
+var _ = Describe("[Functional][Normalization] otel translation", func() {
 	var (
 		framework       *functional.CollectorFunctionalFramework
 		clfb            *functional.ClusterLogForwarderBuilder

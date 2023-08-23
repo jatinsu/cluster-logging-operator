@@ -195,7 +195,7 @@ var _ = Describe("[Functional][Normalization] Json log parsing", func() {
 			FromInput(logging.InputNameApplication).
 			ToElasticSearchOutput()
 
-		structuredTypeName := "kubernetes.namespace_name"
+		structuredTypeName := "k8s.namespace_name"
 		clfb.Forwarder.Spec.Pipelines[0].Parse = "json"
 		clfb.Forwarder.Spec.Outputs[0].Elasticsearch = &logging.Elasticsearch{
 			ElasticsearchStructuredSpec: logging.ElasticsearchStructuredSpec{
@@ -206,7 +206,8 @@ var _ = Describe("[Functional][Normalization] Json log parsing", func() {
 		ExpectOK(framework.Deploy())
 
 		// Log message data
-		sample := `{"@timestamp":"2021-12-14T15:12:47.645Z","message":"Building mime message for recipient 'auser@somedomain.com' and sender 'Sympany <no-reply@somedomain>'.","level":"DEBUG","logger_name":"ch.sympany.backend.notificationservice.mail.MailServiceBean","thread_name":"default task-4"}`
+		// sample := `{"@timestamp":"2021-12-14T15:12:47.645Z","message":"Building mime message for recipient 'auser@somedomain.com' and sender 'Sympany <no-reply@somedomain>'.","level":"DEBUG","logger_name":"ch.sympany.backend.notificationservice.mail.MailServiceBean","thread_name":"default task-4"}`
+		sample := `{"_source":{"kubernetes":{"namespace_name":"test-j4nvkjni"},"timeUnixNano":1692812425,"openshift":{"sequence":1122,"cluster_id":"0fa20e92-676e-4677-8d9f-4e3d8e3970bb"},"resources":{"container":{"image":{"name":"quay.io/openshift-logging/vector","tag":"5.8"},"name":"collector","id":"cri-o://c6b8cb703bb7c51e5669c20100818d8e0f4fa763f07fb2a520553de219123db0"},"k8s":{"pod":{"uid":"c28c3e42-40e5-483f-a0c3-cbbfe9fef1fb","ip":"10.131.0.70","name":"functional","annotations":{"openshift.io/scc":"privileged","k8s.ovn.org/pod-networks":"{\"default\":{\"ip_addresses\":[\"10.131.0.70/23\"],\"mac_address\":\"0a:58:0a:83:00:46\",\"gateway_ips\":[\"10.131.0.1\"],\"ip_address\":\"10.131.0.70/23\",\"gateway_ip\":\"10.131.0.1\"}}","k8s.v1.cni.cncf.io/network-status":"[{\n    \"name\": \"ovn-kubernetes\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.131.0.70\"\n    ],\n    \"mac\": \"0a:58:0a:83:00:46\",\n    \"default\": true,\n    \"dns\": {}\n}]"},"labels":{"testtype":"functional","test-client":"true","testname":"functional"}},"namespace":{"name":"test-j4nvkjni","id":"4246642e-e4fe-4bac-97e1-272de3184728","labels":{"security.openshift.io/scc.podSecurityLabelSync":"false","test-client":"true","pod-security.kubernetes.io/enforce":"privileged","kubernetes.io/metadata.name":"test-j4nvkjni"}}}}}}`
 		expectedMessage = normalizeJson(sample)
 		expected = map[string]interface{}{}
 		_ = json.Unmarshal([]byte(sample), &expected)

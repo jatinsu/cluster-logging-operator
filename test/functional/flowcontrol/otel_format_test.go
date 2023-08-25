@@ -70,7 +70,7 @@ var _ = Describe("[Functional][FlowControl] Policies at Output", func() {
 			records := r[0].Records()
 
 			var jsonObject map[string]interface{}
-			jsonStr := `{"key1": "value1", "key2": "value2"}`
+			jsonStr := `{timeUnixNano: nil}`
 			json.Unmarshal([]byte(jsonStr), &jsonObject)
 
 			Expect(records[0]).To(Equal(jsonObject))
